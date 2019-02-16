@@ -52,14 +52,13 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				float2 end_dir = float2(0.0, -1.0);
-				float2 start_dir = i.uv - float2(0.5, 0.5);
-				float d = dot(start_dir, end_dir);
-				float c = d / (length(start_dir)*length(end_dir));
-				float r = acos(c);
-				float p = r / (2 * 3.1415926);
-				if (i.uv.x > 0.5) p = 1 - p;
-				if (p > _Fill) discard;
+				float2 end = float2(0.0, -1.0);
+				float2 beg = i.uv - float2(0.5, 0.5);
+				float cos_val = dot(beg,end) / (length(beg)*length(end));
+				float rad = acos(cos_val);
+				float percent = rad / (2 * 3.1415926);
+				if (i.uv.x > 0.5) percent = 1 - percent;
+				if (percent > _Fill) discard;
 				return tex2D(_MainTex, i.uv) * _Color;
 			}
 			ENDCG
