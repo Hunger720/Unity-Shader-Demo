@@ -23,7 +23,6 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			
 			#include "UnityCG.cginc"
 
 			struct appdata
@@ -69,11 +68,12 @@
 				float2 beg = i.uv - center;
 				float val = dot(beg,end) / (length(beg)*length(end));
 				float rad = acos(val);
-				if (i.uv.x > 0.5) rad = pi - rad;
+				float s = step(i.uv.x, 0.5);
+				rad *= (2 * s - 1);
+				rad += (1 - s)*pi;
 				float percent = rad / pi;
 
-				if (dis_beg > _PointSize && dis_end > _PointSize && percent > _Fill)
-					discard;
+				clip(0.5 - step(_PointSize, dis_beg)*step(_PointSize, dis_end)*step(_Fill, percent));
 
 				return tex2D(_MainTex, i.uv) * i.color;
 				
