@@ -7,6 +7,7 @@
 	    _To ("To", Range(0, 1)) = 1
 		_PointOffset ("Point Offset", Range(0, 0.5)) = 0
 		_PointSize ("Point Size", Range(0, 0.1)) = 0
+		_AnimeTime ("Anime Time", Float) = 1
 	}
 	SubShader
 	{
@@ -46,6 +47,7 @@
 			float _To;
 			float _PointOffset;
 			float _PointSize;
+			float _AnimeTime;
 			
 			v2f vert (appdata v)
 			{
@@ -59,7 +61,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float pi = 3.1415926 * 2;
-				float theta = lerp(_From, _To, fmod(_Time.y, 1));
+				float theta = lerp(_From, _To, fmod(_Time.y, _AnimeTime)/_AnimeTime);
 
 				float2 center = float2(0.5, 0.5);
 				float2 pt_beg = center - float2(_PointOffset * sin(theta*pi), _PointOffset * cos(theta*pi));
